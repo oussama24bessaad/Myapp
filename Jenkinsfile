@@ -1,8 +1,6 @@
 pipeline{
     environment {
-        imagenameback = "oussama24/backendapp"
-        imagenamefront = "oussama24/frontendapp"
-        imagenamemongo = "mongo"
+        imagename = "oussama24/backendapp"
         registryCredential = "dockerhub_credentials"
         dockerImage = 'frontendapp'
         
@@ -16,7 +14,7 @@ pipeline{
                 }
                     withSonarQubeEnv("SonarQube Scanner") {
                     sh "${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=oussamaDevops \
+                        -Dsonar.projectKey=Myapp \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.login=admin \
@@ -39,10 +37,10 @@ pipeline{
 // 			}
 // 		}
         
-        stage("Backend_docker-build"){
+        stage("docker-build"){
             steps{
                     script {
-                    dockerImage = docker.build imagenameback   
+                    dockerImage = docker.build imagename  
                     docker.withRegistry( '', registryCredential ) {
                     dockerImage.push("$BUILD_NUMBER")
                     dockerImage.push('latest')
@@ -50,27 +48,16 @@ pipeline{
                 }
             }
         }
-        stage("Frontend_docker-build"){
-            steps{
-                    script {
-                    dockerImage = docker.build imagenamefront   
-                    docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push("$BUILD_NUMBER")
-                    dockerImage.push('latest')
-                    }
-                }
-            }
-        }
-        stage("Mongo_docker-build"){
-            steps{
-                    script {
-                    dockerImage = docker.build imagenamemongo   
-                    docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push("$BUILD_NUMBER")
-                    dockerImage.push('latest')
-                    }
-                }
-            }
-        }
+       
         
+      stage("deploy"){
+            steps{
+            script {
+                    kubernetesDeploy(configs: "./Kubernetes/backend-deployment.yaml", kubeconfigId: "kubernetes")
+                    kubernetesDeploy(configs: "./Kubernetes/mongo-statefullset.yaml", kubeconfigId: "kubernetes")  
+                    kubernetesDeploy(configs: "./Kubernetes/ingress.yaml", kubeconfigId: "kubernetes")  
+                    kubernetesDeploy(configs: "./Kubernetes/frontend-deployment.yaml", kubeconfigId: "kubernetes")
+        }
+      }
+        }  
 }
