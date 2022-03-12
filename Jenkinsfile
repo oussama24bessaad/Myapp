@@ -3,36 +3,37 @@ pipeline{
         imagename = "oussama24/backendapp"
         registryCredential = "dockerhub_credentials"
         dockerImage = 'backendapp'
-        
     }
     agent any
     stages{
-        stage("SonarQube analysis"){
+
+            
+        
+        stage('SonarQube analysis') {
+                    
             steps{
                 script {
-                    scannerHome = tool 'SonarQube Scanner 4.6.2.2472'
-                }
-                    withSonarQubeEnv("SonarQube Scanner") {
-                    sh "${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=Myapp \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=admin \
-                        -Dsonar.password=admin007"
-                    } 
-                }
+               scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    withSonarQubeEnv('sonarqube-server') { 
+        
+                       sh "${scannerHome}/bin/sonar-scanner"
+                     
+                    }
+                }         
             }
         }
+        
         stage("build"){
             
             steps{
                 sh 'npm install'
-                sh 'npm run build'
+                sh 'docker --version'
             }
         }
-        
+      
         stage("docker-build"){
-            steps{
+            steps{  
+                    
                     script {
                     dockerImage = docker.build imagename   
                     docker.withRegistry( '', registryCredential ) {
@@ -42,12 +43,15 @@ pipeline{
                 }
             }
         }
-               
- stage("deploy"){
+        stage("deploy"){
             steps{
-                echo 'deployment'
-            }
+            script {
+                    kubernetesDeploy(configs: "./Kubernetes/backend-deployment.yaml", kubeconfigId: "kubernetes")
+                    kubernetesDeploy(configs: "./Kubernetes/mongo-statefullset.yaml", kubeconfigId: "kubernetes")  
+                    kubernetesDeploy(configs: "./Kubernetes/ingress.yaml", kubeconfigId: "kubernetes")  
+                    kubernetesDeploy(configs: "./Kubernetes/frontend-deployment.yaml", kubeconfigId: "kubernetes")
         }
-
-
+      }
+        }  
+    }
 }
