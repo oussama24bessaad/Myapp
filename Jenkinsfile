@@ -43,7 +43,7 @@ pipeline{
                 }
             }
         }
-        stage('Deploy App) {
+        stage('Deploy App') {
     steps {
         withCredentials([
             string(credentialsId: 'my_kubernetes', variable: 'api_token')
