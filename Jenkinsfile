@@ -2,7 +2,7 @@ pipeline{
     environment {
         imagename = "oussama24/backendapp"
         registryCredential = "dockerhub_credentials"
-        dockerImage = 'frontendapp'
+        dockerImage = 'backendapp'
         
     }
     agent any
@@ -40,7 +40,7 @@ pipeline{
         stage("docker-build"){
             steps{
                     script {
-                    dockerImage = docker.build imagename  
+                    dockerImage = docker.build imagename   
                     docker.withRegistry( '', registryCredential ) {
                     dockerImage.push("$BUILD_NUMBER")
                     dockerImage.push('latest')
