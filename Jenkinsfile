@@ -80,5 +80,5 @@ pipeline{
                     kubernetesDeploy(configs: "./Kubernetes/frontend-deployment.yaml", kubeconfigId: "kubernetes")
         }
       }
-    }
+    
 }
