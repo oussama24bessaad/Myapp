@@ -1,10 +1,5 @@
 pipeline{
-    environment {
-        imagename = "oussama24/backendapp"
-        registryCredential = "dockerhub_credentials"
-        dockerImage = 'backendapp'
-        
-    }
+
     agent any
     stages{
        
