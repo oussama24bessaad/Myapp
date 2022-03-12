@@ -43,15 +43,14 @@ pipeline{
                 }
             }
         }
-        stage("deploy"){
-            steps{
-            script {
-                    kubernetesDeploy(configs: "./Kubernetes/backend-deployment.yaml", kubeconfigId: "k8s")
-                    kubernetesDeploy(configs: "./Kubernetes/mongo-statefullset.yaml", kubeconfigId: "k8s")  
-                    kubernetesDeploy(configs: "./Kubernetes/ingress.yaml", kubeconfigId: "k8s")  
-                    kubernetesDeploy(configs: "./Kubernetes/frontend-deployment.yaml", kubeconfigId: "k8s")
-        }
-      }
-        }  
+        stage('Deploy App) {
+    steps {
+        withCredentials([
+            string(credentialsId: 'my_kubernetes', variable: 'api_token')
+            ]) {
+             sh 'kubectl --token $api_token --server https://192.168.58.2:8443 --insecure-skip-tls-verify=true apply -f ./Kubernetes/backend-deployment.yaml '
+               }
+            }
+           }
     }
 }
