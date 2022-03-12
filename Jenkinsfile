@@ -73,6 +73,7 @@ pipeline{
             }
         }
         stage("deploy"){
+            steps{
             script {
                     kubernetesDeploy(configs: "./Kubernetes/backend-deployment.yaml", kubeconfigId: "kubernetes")
                     kubernetesDeploy(configs: "./Kubernetes/mongo-statefullset.yaml", kubeconfigId: "kubernetes")  
@@ -80,5 +81,5 @@ pipeline{
                     kubernetesDeploy(configs: "./Kubernetes/frontend-deployment.yaml", kubeconfigId: "kubernetes")
         }
       }
-    
+        }
 }
