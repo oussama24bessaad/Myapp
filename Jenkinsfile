@@ -5,6 +5,8 @@ pipeline{
         dockerImageback = 'backendapp'
         imagenamefront = "oussama24/frontendapp"
         dockerImagefront = 'frontendapp'
+        imagenamemongo = "mongo:5.0"
+        dockerImagemongo = 'mongo'
     }
     agent any
     stages{
@@ -48,6 +50,13 @@ pipeline{
                     docker.withRegistry( '', registryCredential ) {
                     dockerImagefront.push("$BUILD_NUMBER")
                     dockerImagefront.push('latest')
+                    }
+                }
+                script {
+                    dockerImagemongo = docker.build imagenamemongo  
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImagemongo.push("$BUILD_NUMBER")
+                    dockerImagemongo.push('latest')
                     }
                 }
             }
