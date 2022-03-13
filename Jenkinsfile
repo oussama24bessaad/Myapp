@@ -5,7 +5,7 @@ pipeline{
         dockerImageback = 'backendapp'
         imagenamefront = "oussama24/frontendapp"
         dockerImagefront = 'frontendapp'
-        imagenamemongo = "mongo:5.0"
+        imagenamemongo = "oussama24/mongo:5.0"
         dockerImagemongo = 'mongo'
     }
     agent any
