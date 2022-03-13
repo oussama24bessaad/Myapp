@@ -1,8 +1,10 @@
 pipeline{
     environment {
-        imagename = "oussama24/backendapp"
         registryCredential = "dockerhub_credentials"
-        dockerImage = 'backendapp'
+        imagenameback = "oussama24/backendapp"
+        dockerImageback = 'backendapp'
+        imagenamefront = "oussama24/frontendapp"
+        dockerImagefront = 'frontendapp'
     }
     agent any
     stages{
@@ -35,10 +37,16 @@ pipeline{
             steps{  
                     
                     script {
-                    dockerImage = docker.build imagename   
+                    dockerImageback = docker.build imagenameback   
                     docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push("$BUILD_NUMBER")
-                    dockerImage.push('latest')
+                    dockerImageback.push("$BUILD_NUMBER")
+                    dockerImageback.push('latest')
+                    }
+                         script {
+                    dockerImagefront = docker.build imagenamefront   
+                    docker.withRegistry( '', registryCredential ) {
+                    dockerImagefront.push("$BUILD_NUMBER")
+                    dockerImagefront.push('latest')
                     }
                 }
             }
@@ -48,7 +56,7 @@ pipeline{
         withCredentials([
             string(credentialsId: 'my_kubernetes', variable: 'api_token')
             ]) {
-             sh 'kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f ./Kubernetes/backend-deployment.yaml '
+             sh 'kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f ./Kubernetes '
                }
             }
            }
