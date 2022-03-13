@@ -22,6 +22,7 @@ spec:
       containers:
         - name: devops
           image: oussama24/backendapp:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           resources: {}  
