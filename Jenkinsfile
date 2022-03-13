@@ -42,6 +42,7 @@ pipeline{
                     dockerImageback.push("$BUILD_NUMBER")
                     dockerImageback.push('latest')
                     }
+                    }
                          script {
                     dockerImagefront = docker.build imagenamefront   
                     docker.withRegistry( '', registryCredential ) {
@@ -61,5 +62,4 @@ pipeline{
             }
            }
     }
-}
 }
