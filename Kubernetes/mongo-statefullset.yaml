@@ -60,8 +60,10 @@ spec:
       protocol: TCP
       port: 27017
       targetPort: 27017
+      nodePort: 32000
   selector:
     app: mongo
+  type: NodePort
 ---
 
 apiVersion: v1
