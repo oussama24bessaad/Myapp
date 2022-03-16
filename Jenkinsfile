@@ -1,11 +1,11 @@
 pipeline{
     environment {
         registryCredential = "dockerhub_credentials"
-        imagenameback = "oussama24/backendapp"
+        imagenameback = "oussama24/backendapp:latest"
         dockerImageback = 'backendapp'
-        imagenamefront = "oussama24/frontendapp"
+        imagenamefront = "oussama24/frontendapp:latest"
         dockerImagefront = 'frontendapp'
-        imagenamemongo = "oussama24/mongo:5.0"
+        imagenamemongo = "oussama24/mongo:latest"
         dockerImagemongo = 'mongo'
     }
     agent any
