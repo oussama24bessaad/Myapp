@@ -26,7 +26,22 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000 
-          
+          env:
+            - name: USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: USR_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
+            - name: MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-config
+                  key: mongo-url
 ---
 apiVersion: v1
 kind: Service
