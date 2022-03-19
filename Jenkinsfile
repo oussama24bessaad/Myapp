@@ -7,7 +7,7 @@ pipeline{
         dockerImagefront = 'frontendapp'
         imagenamemongo = "oussama24/mongo:latest"
         dockerImagemongo = 'mongo'
-        scannerHome = tool name: 'SonarScanner'
+        scannerHome = tool name: 'sonarqube-scanner'
     }
     agent any
     stages{
