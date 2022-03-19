@@ -11,21 +11,35 @@ pipeline{
     agent any
     stages{
 
-            
-        
-        stage('SonarQube analysis') {
-                    
+          
+        stage("test-sonar"){
             steps{
                 script {
-               scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    withSonarQubeEnv('sonarqube-server') { 
-        
-                       sh "${scannerHome}/bin/sonar-scanner"
-                     
-                    }
-                }         
+                    withSonarQubeEnv("sonarQube") {
+                    sh "${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=oussama \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=https://sonarqube.projectcloud.click/ \
+                        -Dsonar.login=admin \
+                        -Dsonar.password=admin"
+                    } 
+                }
             }
-        }
+        } 
+        
+        //stage('SonarQube analysis') {
+                    
+          //  steps{
+            //    script {
+             //  scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+              //      withSonarQubeEnv('sonarqube-server') { 
+        
+                //       sh "${scannerHome}/bin/sonar-scanner"
+                     
+              //      }
+            //    }         
+         //   }
+      //  }
         
         stage("build"){
             
