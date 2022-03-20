@@ -7,40 +7,40 @@ pipeline{
         dockerImagefront = 'frontendapp'
         imagenamemongo = "oussama24/mongo:latest"
         dockerImagemongo = 'mongo'
-        scannerHome = tool name: 'sonarqube-scanner'
+//         scannerHome = tool name: 'sonarqube-scanner'
     }
     agent any
     stages{
 
           
-        stage("test-sonar"){
-            steps{
-                script {
-                    withSonarQubeEnv("sonarQube") {
-                    sh "${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=oussama \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=https://sonarqube.projectcloud.click/ \
-                        -Dsonar.login=admin \
-                        -Dsonar.password=admin"
-                    } 
-                }
-            }
-        } 
+//         stage("test-sonar"){
+//             steps{
+//                 script {
+//                     withSonarQubeEnv("sonarQube") {
+//                     sh "${scannerHome}/bin/sonar-scanner \
+//                         -Dsonar.projectKey=oussama \
+//                         -Dsonar.sources=. \
+//                         -Dsonar.host.url=https://sonarqube.projectcloud.click/ \
+//                         -Dsonar.login=admin \
+//                         -Dsonar.password=admin"
+//                     } 
+//                 }
+//             }
+//         } 
         
-        //stage('SonarQube analysis') {
+        stage('SonarQube analysis') {
                     
-          //  steps{
-            //    script {
-             //  scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-              //      withSonarQubeEnv('sonarqube-server') { 
+           steps{
+               script {
+              scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                   withSonarQubeEnv('sonarqube-server') { 
         
-                //       sh "${scannerHome}/bin/sonar-scanner"
+                      sh "${scannerHome}/bin/sonar-scanner"
                      
-              //      }
-            //    }         
-         //   }
-      //  }
+                   }
+               }         
+           }
+       }
         
         stage("build"){
             
